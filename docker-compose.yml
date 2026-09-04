@@ -1,0 +1,16 @@
+services:
+  demo-app:
+    build: ./
+    environment:
+      OTEL_TRACES_EXPORTER: "logging"
+      OTEL_METRICS_EXPORTER: "logging"
+      OTEL_LOGS_EXPORTER: "logging"
+      OTEL_SERVICE_NAME: "demo-otlp"
+    ports:
+      - "8091:8091"
+  loki:
+    container_name: loki
+    image: grafana/loki:latest
+    command: -config.file=/etc/loki/local-config.yaml
+    ports:
+      - "3100"
