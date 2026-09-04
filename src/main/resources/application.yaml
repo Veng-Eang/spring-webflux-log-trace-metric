@@ -2,4 +2,12 @@ server:
   port: 8091
 spring:
   application:
-    name: demo
+    name: demo-oltp
+  data:
+    mongodb:
+      username: vengeang
+      password: password
+      host: mongodb
+      port: 27017
+      database: demo-oltp
+      authentication-database: admin

@@ -1,10 +1,33 @@
 services:
+  mongodb:
+    image: mongo:latest
+    container_name: mongo-demo-oltp
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: "vengeang"
+      MONGO_INITDB_ROOT_PASSWORD: "password"
+      MONGO_INITDB_DATABASE: "demo-oltp"
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017 --quiet
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    volumes:
+      - mongo_data:/data/db
   demo-app:
-    build: ./
+    image: demo-oltp:latest
     environment:
       OTEL_TRACES_EXPORTER: "logging"
       OTEL_METRICS_EXPORTER: "logging"
       OTEL_LOGS_EXPORTER: "logging"
       OTEL_SERVICE_NAME: "demo-otlp"
+      SPRING_DATA_MONGODB_USERNAME: "vengeang"
+      SPRING_DATA_MONGODB_PORT: 27017
+      SPRING_DATA_MONGODB_PASSWORD: "password"
+      SPRING_DATA_MONGODB_HOST: "mongodb"
+      SPRING_DATA_MONGODB_DATABASE: "demo-oltp"
     ports:
       - "8091:8091"
+volumes:
+  mongo_data:

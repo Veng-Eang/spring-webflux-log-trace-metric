@@ -1,8 +1,19 @@
 package online.eazykhode.demo.entity;
 
 import java.math.BigDecimal;
-import java.time.ZonedDateTime;
+import java.time.Instant;
 
-public record Order(Long id, Long customerId, ZonedDateTime orderDate, BigDecimal totalAmount) {
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+import lombok.Data;
+
+@Document(collection = "orders")
+@Data
+public class Order{
+	@Id
+    String id;
+    Long customerId;
+    Instant orderDate;
+    BigDecimal totalAmount;
 }
